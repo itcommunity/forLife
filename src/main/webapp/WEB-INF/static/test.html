@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>For life</title>
+    <script src="http://code.jquery.com/jquery-2.1.1.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script>
+        function check_authenticated() {
+            $.ajax({
+                url: "/userinfo",
+                type: "GET",
+                cache: false,
+                success: function (result) {
+                    if (result.authenticated) {
+                        $("#signedin_name").text(result.username);
+                        $("#login_form").removeClass("show");
+                        $("#login_form").addClass("hidden");
+                        $("#loggedin_info").removeClass("hidden");
+                        $("#loggedin_info").addClass("show");
+                    } else {
+                        $("#loggedin_info").removeClass("show");
+                        $("#loggedin_info").addClass("hidden");
+                        $("#login_form").removeClass("hidden");
+                        $("#login_form").addClass("show");
+                    }
+                }
+            });
+
+        }
+
+        function login() {
+            $.ajax({
+                url: "/login.json",
+                type: "POST",
+                data: JSON.stringify({username: $("#inputEmail").val(), password: $("#inputPassword").val()}),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                cache: false,
+                success: function (result) {
+                    if (result.authenticated) check_authenticated();
+                }
+            });
+        }
+
+        function signup_submit() {
+            $.ajax({
+                url: "/signup.json",
+                type: "POST",
+                data: JSON.stringify({
+                    username: $("#signupInputUsername").val(),
+                    email: $("#signupInputEmail").val(),
+                    password: $("#signupInputPassword").val()
+                }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                cache: false,
+                success: function (result) {
+                    $('#signupModal').modal('hide');
+                }
+            });
+        }
+
+
+        function logout() {
+            $.ajax({
+                url: "/logout",
+                type: "GET",
+                cache: false,
+                success: function (result) {
+                    check_authenticated();
+                }
+            });
+        }
+
+        function get_top_menu_elements() {
+            $.ajax({
+                url: "/subject/all",
+                type: "GET",
+                cache: true,
+                success: function (result) {
+                    $('#top_menu li').remove();
+                    $.each(result, function (id, element) {
+                        $('#top_menu ul').append($('<li>').attr('role', 'presentation').data('id', element.id).append($('<a>').attr('href', '#').text(element.name)));
+                    });
+                    get_left_menu_elements($('#top_menu li').first().data('id'));
+                    $('#top_menu li').first().addClass('active');
+                }
+            });
+        }
+
+        function get_left_menu_elements(subject_id) {
+            $.ajax({
+                url: "/subject/elements/" + subject_id,
+                type: "GET",
+                cache: true,
+                success: function (result) {
+                    $('#left_menu li').remove();
+                    $.each(result, function (id, element) {
+                        $('#left_menu ul').append($('<li>').attr('role', 'presentation').data('id', element.id).append($('<a>').attr('href', '#').text(element.name)));
+                    });
+                    var content_id = $('#left_menu li').first().data('id');
+                    if (content_id != null && content_id > 0) {
+                        get_main_content(content_id);
+                        $('#left_menu li').first().addClass('active');
+                    }
+                }
+            });
+        }
+
+        function get_main_content(element_id) {
+            $.ajax({
+                url: "/element/" + element_id,
+                type: "GET",
+                cache: true,
+                success: function (result) {
+                    $("#main_content").empty();
+                    $("#main_content").append(result.content);
+                }
+            });
+        }
+
+        function add_article() {
+            $.ajax({
+                url: "/article/add",
+                type: "POST",
+                data: JSON.stringify({
+                    name: $("#articleName").val(),
+                    subjectId: $("#articleSubject option:selected").val(),
+                    content: tinyMCE.get('articleContent').getContent()
+                }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                cache: false,
+                success: function (result) {
+                    $('#articleModal').modal('hide');
+                    update_left_menu();
+                }
+            });
+//            alert(tinyMCE.get('articleContent').getContent());
+        }
+
+        function add_subject() {
+            $.ajax({
+                url: "/subject/add",
+                type: "POST",
+                data: JSON.stringify({
+                    name: $("#subjectName").val()
+                }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                cache: false,
+                success: function (result) {
+                    $('#subjectModal').modal('hide');
+                    update_top_menu();
+                }
+            });
+//            alert(tinyMCE.get('articleContent').getContent());
+        }
+
+
+        function update_left_menu() {
+            var id = $("#top_menu .active").data('id');
+            if (id != null && id > 0) {
+                get_left_menu_elements(id);
+            }
+        }
+
+        function update_top_menu() {
+//            var id = $("#top_menu .active").data('id');
+//            if(id!=null&&id>0){
+//                get_left_menu_elements(id);
+//            }
+            get_top_menu_elements()
+        }
+
+        function get_last_added_elements(){
+
+        }
+
+        $(document).ready(function () {
+
+//            $('textarea.tinymce').tinymce({
+//                script_url : '/static/tinymce/tinymce.min.js'
+//            });
+
+            check_authenticated();
+
+            get_top_menu_elements();
+
+            $("#top_menu").on('click', 'li', function () {
+                $("#top_menu .active").removeClass("active");
+                get_left_menu_elements($(this).data('id'));
+//                alert($(this).data('id'));
+                $(this).addClass("active");
+            });
+
+            $("#left_menu").on('click', 'li', function () {
+                $("#left_menu .active").removeClass("active");
+                get_main_content($(this).data('id'));
+                $(this).addClass("active");
+            });
+
+            $('#articleModal').on('shown.bs.modal', function () {
+                $.ajax({
+                    url: "/subject/all",
+                    type: "GET",
+                    cache: true,
+                    success: function (result) {
+                        $('#articleSubject option').remove();
+                        $.each(result, function (id, element) {
+                            $('#articleSubject').append($('<option>').attr("value", element.id).text(element.name));
+                        });
+                    }
+                });
+            })
+        });
+
+    </script>
+    <script type="text/javascript" src="/static/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript">
+        tinymce.init({
+            selector: "textarea"
+        });
+    </script>
+
+</head>
+<body>
+<div class="row main" style="background: #d5d5d5">
+    <div class="col-md-12" style="height: 115px">
+        <div class="col-md-2" style="height: 100%; background: #357ebd"></div>
+        <div class="col-md-8" style="background: #66512c; height: 100%"></div>
+        <div class="col-md-2 show" id="login_form">
+            <input type="email" class="form-control" id="inputEmail" placeholder="Enter email">
+            <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+            <button type="button" class="btn btn-primary navbar-btn" onclick="login()">Ok</button>
+            <button type="button" class="btn btn-default navbar-btn" data-toggle="modal"
+                    data-target="#signupModal">Signup
+            </button>
+        </div>
+        <div class="col-md-2 hidden" id="loggedin_info">
+            <p class="navbar-text navbar-left">Signed in as <a id="signedin_name" href="#" class="navbar-link">Mark
+                Otto</a></p>
+            <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#subjectModal">Add
+                Subject
+            </button>
+            <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#articleModal">Add
+                Element
+            </button>
+            <button type="button" class="btn btn-default" onclick="logout()">Logout</button>
+        </div>
+    </div>
+    <div class="col-md-12" style="height: 50px">
+        <div class="col-md-2" style="background: #555555; height: 100%"></div>
+        <div class="col-md-8" id="top_menu">
+            <ul class="nav nav-pills">
+            </ul>
+        </div>
+        <div class="col-md-2" style="background: #555555; height: 100%">
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-2" id="left_menu">
+            <nav class="navbar">
+                <ul class="nav nav-pills nav-stacked">
+                </ul>
+            </nav>
+        </div>
+        <div id="main_content" class="col-md-8" style="background: #46b8da;height: 300px">
+        </div>
+        <div class="col-md-2" id="lastAddedElements">
+        </div>
+    </div>
+    <!-- Modal signup -->
+    <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Signup</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="signupInputUsername">Username</label>
+                        <input type="email" class="form-control" id="signupInputUsername"
+                               placeholder="Enter Username">
+                    </div>
+                    <div class="form-group">
+                        <label for="signupInputEmail">Email address</label>
+                        <input type="email" class="form-control" id="signupInputEmail" placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="signupInputPassword">Password</label>
+                        <input type="password" class="form-control" id="signupInputPassword" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <label for="signupInputPasswordRepeat">Repeat password</label>
+                        <input type="password" class="form-control" id="signupInputPasswordRepeat"
+                               placeholder="Password">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="signup_submit()">Ok</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Modal add article-->
+    <div class="modal fade" id="articleModal" tabindex="-1" role="dialog" aria-labelledby="articleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="articleModalLabel">Article</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="articleName">Article name</label>
+                        <input type="text" class="form-control" id="articleName"
+                               placeholder="Article Name">
+                    </div>
+                    <div class="form-group">
+                        <select id="articleSubject" class="form-control">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="articleContent"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="add_article()">Ok</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Modal add subject-->
+    <div class="modal fade" id="subjectModal" tabindex="-1" role="dialog" aria-labelledby="subjectModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="subjectModalLabel">Subject</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="subjectName">Subject name</label>
+                        <input type="text" class="form-control" id="subjectName"
+                               placeholder="Subject name">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="add_subject()">Ok</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

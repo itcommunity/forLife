@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html manifest="photoalbums">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Photoalbum</title>
+    <script src="http://code.jquery.com/jquery-2.1.1.js"></script>
+    <!--<script src="/static/js/photoalbum.js"></script>-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/elements.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="http://localhost:8080/static/js/json-template.js"></script>
+
+    <script>
+
+
+        var tempaltes = {};
+        //        tempaltes["top_navtabs"] = jsontemplate.Template("{.section name}<div id='top_panel' class='col-md-12 center-block'><div id='panel' class='col-md-10'><ul class='nav nav-tabs extendable'></ul></div></div>{.end}");
+        //        tempaltes["navbutton"] = jsontemplate.Template("{.section name}<li class='handler' role='presentation' data-id={id} data-type={componentType.name}><a href='#'>{@}</a></li>{.end}");
+        tempaltes["button"] = jsontemplate.Template("{.section name}<li role='presentation' class='handler' data-id={id} data-class='{clazz.componentClass}'><a href='#'>{@}</a></li>{.end}");
+        //        tempaltes["main_div"] = jsontemplate.Template("{.section name}<div id='photoalbum' class='row extendable'></div>{.end}");
+        //        tempaltes["top_div"] = jsontemplate.Template("{.section name}<div id='top' class='col-md-12' style='height: 200px; background: gray'></div>{.end}");
+        //        tempaltes["left_navpills"] = jsontemplate.Template("{.section name}<div id='left_panel' class='col-md-2'><ul class='nav nav-pills nav-stacked extendable'></ul></div>{.end}");
+        //        tempaltes["content_div"] = jsontemplate.Template("{.section name}<div id='main' class='col-md-10 extendable'></div>{.end}");
+
+        var event_handlers = {};
+        event_handlers["topnavtabs"] = function () {
+//                load_left_elements($(this).text());
+//                $('#panel li').removeClass("active");
+            $('li').removeClass("active");
+//            alert($(this).data('type'));
+            var element = $('#photoalbum');
+            $('#left_panel').remove();
+            load_components($(this).data('type'), $(this).data('id'), element);
+            $(this).addClass("active");
+        };
+        event_handlers["leftnavtabs"] = function () {
+//                load_left_elements($(this).text());
+//                $('#panel li').removeClass("active");
+//            alert("leftBut")
+            $('li').removeClass("active");
+            $(this).addClass("active");
+        };
+        event_handlers["top_button"] = function () {
+//                load_left_elements($(this).text());
+//                $('#panel li').removeClass("active");
+//            alert("leftBut")
+            $('.' + $(this).data('class') + ' li').removeClass("active");
+            $('.left-panel-ul li').remove();
+            load_components('button', $(this).data('id'));
+//            alert($(this).data('id'));
+            $(this).addClass("active");
+        };
+        event_handlers["left_button"] = function () {
+            $('.' + $(this).data('class') + ' li').removeClass("active");
+            $('.top-panel-ul li').remove();
+            load_components('button', $(this).data('id'));
+//            alert($(this).data('id'));
+            $(this).addClass("active");
+        };
+
+        //                    "</ul>{.end}";
+
+        //        function load_top_elements(){
+        //            $.ajax({
+        //                url: "/topelements",
+        //                dataType: "text",
+        //                cache: true,
+        //                success: function(data) {
+        //                    $('#panel li').remove();
+        //                    var data = $.parseJSON(data);
+        //                    $.each(data, function(id, element) {
+        //                        $('#panel ul').append($('<li>').append($('<a>').attr('href', '#').text(element.name)));
+        //                    });
+        //
+        //                    $('#panel li:first').addClass('active');
+        //                    load_left_elements($('#panel li:first').text());
+        //                }
+        //            });
+        //        }
+
+        //        function load_left_elements(top_element){
+        //            $.ajax({
+        //                url: "/leftelements/"+top_element,
+        //                dataType: "text",
+        //                cache: true,
+        //                success: function(data) {
+        //                    $('#left_panel li').remove();
+        //                    var data = $.parseJSON(data);
+        //                    $.each(data, function(id, element) {
+        //                        $('#left_panel ul').append($('<li>').append($('<a>').attr('href', '#').text(element.name)));
+        //
+        //                    });
+        //                    $('#left_panel li:first').addClass('active');
+        //                    load_main_element($('#left_panel li:first').text());
+        //                }
+        //            });
+        //        }
+        //
+        //        function load_main_element(left_element) {
+        ////            $('#main div').load('/mainelements/'+left_element);
+        ////        }
+        //
+        //            var album_template = jsontemplate.Template(
+        //                    "{.repeated section albums}" +
+        //                    "<div class='row'>" +
+        //                    "<div class='page-header'><h1>{name}</h1>" +
+        //                    "</div>" +
+        //                    "{.repeated section photos}" +
+        //                    "<div class='col-xs-6 col-md-3'>" +
+        //                    "<div class='thumbnail'>" +
+        //                    "<a href='#'>" +
+        //                    "<img src='http://localhost:8080/static/photo/test_album/test2' height='100'>" +
+        //                    "</a>" +
+        //                    "<div class='caption'>" +
+        //                    "<h3>{name}</h3>" +
+        //                    "</div>" +
+        //                    "</div>" +
+        //                    "</div>" +
+        //                    "{.end}" +
+        //                    "</div>" +
+        //                    "{.end}"
+        //            );
+
+        //            $.ajax({
+        //                url: "http://localhost:8080/albums",
+        //                url: "/albums",
+        //                dataType: "text",
+        //                cache: true,
+        //                success: function(result) {
+        //                    $("#main div").remove();
+        //                    $("#main").append(album_template.expand($.parseJSON(result)));
+        //                }});
+        //        }
+
+
+        function load_site() {
+            $.ajax({
+//                url: "http://localhost:8080/albums",
+                url: "/page/test",
+                dataType: "text",
+                cache: true,
+                success: function (result) {
+                    var data = $.parseJSON(result);
+//                    parse_components(data.site.components, $("body").addClass("extendable"));
+                    create_components(data.components);
+                }
+            });
+        }
+
+        function load_components(type, id) {
+            $.ajax({
+                url: "/" + type + "/" + id,
+                dataType: "text",
+                cache: true,
+                success: function (result) {
+                    var data = $.parseJSON(result);
+//                    element.remove();
+//                    parse_components(data, element.addClass('extendable'));
+                    create_components(data);
+                }
+            });
+        }
+
+        //        function parse_components(components, element) {
+        //            var ext_element = $(".extendable");
+        //            $(".extendable").removeClass("extendable");
+        //            $.each(components, function (index, component) {
+        //                ext_element.append(tempaltes[component.componentType.template].expand(component));
+        //                if (component.componentType.eventHandler != "") {
+        //                    $('.handler').click(event_handlers[component.componentType.eventHandler]);
+        //                    $('.handler').removeClass("handler");
+        //                }
+        //                if (component.includedComponents.length > 0) {
+        //                    parse_components(component.includedComponents, ext_element);
+        //                }
+        //            });
+        //        }
+
+        function create_components(components) {
+            $.each(components, function (index, component) {
+                $('.' + component.clazz.componentClass).append(tempaltes[component.template].expand(component));
+                if (component.eventHandler.name != null) {
+                    $('.handler').click(event_handlers[component.eventHandler.name]);
+                    $('.handler').removeClass("handler");
+                }
+//                alert($('.'+component.clazz.componentClass).data('type'));
+            });
+        }
+
+        function check_authenticated() {
+            $.ajax({
+                url: "/userinfo",
+                type: "GET",
+                cache: false,
+                success: function (result) {
+                    if (result.authenticated) {
+                        $("#username").text(result.username);
+                        $(".login").removeClass("show");
+                        $(".login").addClass("hidden");
+                        $(".loggedin").removeClass("hidden");
+                        $(".loggedin").addClass("show");
+                    } else {
+                        $(".loggedin").removeClass("show");
+                        $(".loggedin").addClass("hidden");
+                        $(".login").removeClass("hidden");
+                        $(".login").addClass("show");
+                    }
+                }
+            });
+
+        }
+
+        function login(){
+            $.ajax({
+                url: "/login.json",
+                type: "POST",
+                data: JSON.stringify({username: $("#inputEmail").val(), password: $("#inputPassword").val()}),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+//                    contentType : "application/x-www-form-urlencoded",
+                cache: false,
+                success: function (result) {
+//                        var data = $.parseJSON(result);
+//                        if(result.authenticated) {
+//                            $("#username").text(result.username);
+//                            $(".login").removeClass("show");
+//                            $(".login").addClass("hidden");
+//                            $(".loggedin").removeClass("hidden");
+//                            $(".loggedin").addClass("show");
+//                        } else{
+//                            alert(result.error)
+//                        }
+                    if (result.authenticated) check_authenticated();
+                }
+            });
+        }
+
+
+
+        $(document).ready(function () {
+//            load_site();
+//            load_top_elements();
+//
+
+            check_authenticated()
+
+            $('#login_submit').on("click", function () {
+                login()
+            });
+
+            $('#signup_enable').on("click", function () {
+                $("#signup_block").removeClass("hidden");
+                $("#signup_block").addClass("show");
+            });
+
+            $('#signup_submit').on("click", function () {
+                $("#signup_block").removeClass("show");
+                $("#signup_block").addClass("hidden");
+            });
+
+            $('#signup_cancel').on("click", function () {
+                $("#signup_block").removeClass("show");
+                $("#signup_block").addClass("hidden");
+            });
+
+//            $('#signupModal').on('shown.bs.modal', function () {
+//                $('#signupModal').modal('hide');
+//
+//            })
+
+            $('#signupSubmit').on('click', function() {
+                $('#signupModal').modal('hide');
+                $.ajax({
+                    url: "/signup.json",
+                    type: "POST",
+                    data: JSON.stringify({
+                        username: $("#signupInputUsername").val(),
+                        email: $("#signupInputEmail").val(),
+                        password: $("#signupInputPassword").val()
+                    }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+//                    contentType : "application/x-www-form-urlencoded",
+                    cache: false,
+                    success: function (result) {
+                    }
+                });
+            });
+
+            $('.loggedin').on("click", "button", function () {
+                $.ajax({
+                    url: "/logout",
+                    type: "GET",
+//                    contentType : "application/x-www-form-urlencoded",
+                    cache: false,
+                    success: function (result) {
+////                        var data = $.parseJSON(result);
+//                        if(result.authenticated) {
+//                            alert(result.username)
+//                        } else{
+//                            alert(result.error)
+//                        }
+                        check_authenticated()
+                    }
+                });
+            });
+
+
+//            $('body').click(event_handlers["topnavtabs"]);
+//            $('body').on("click", "li", function () {
+//                load_left_elements($(this).text());
+//                $('li').removeClass("active");
+//                $(this).addClass("active");
+//            });
+//
+//            $('#left_panel').on("click", "li", function () {
+//                load_main_element($(this).text());
+//                $('#left_panel li').removeClass("active");
+//                $(this).addClass("active");
+//            });
+
+
+        });
+    </script>
+</head>
+<body>
+<div class="row main">
+    <div class="col-md-12" style="height: 150px">
+        <div class="col-md-10 top" style="background: gray">
+            <!--<img src="/static/photo/background.jpg">-->
+        </div>
+        <div class="col-md-2 login show">
+            <div class="form-group">
+                <!--<label for="inputEmail">Email address</label>-->
+                <input type="email" class="form-control" id="inputEmail" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+                <!--<label for="inputPassword">Password</label>-->
+                <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+            </div>
+            <button type="button" class="btn btn-primary" id="login_submit">Ok</button>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#signupModal">
+                Signup
+            </button>
+        </div>
+        <div class="col-md-2 hidden loggedin">
+            <h5>You are loged in as </h5>
+            <h5 id="username" style="color: #357ebd"></h5>
+            <br>
+            <button type="button" class="btn btn-default" id="logout">Logout</button>
+        </div>
+    </div>
+    <div class="col-md-10">
+        <ul class="nav nav-tabs top-panel-ul" style="background: gainsboro">
+        </ul>
+        <div class="col-md-2 left-panel" style="width: 150px">
+            <ul class="nav nav-pills nav-stacked left-panel-ul" role="tablist">
+            </ul>
+        </div>
+        <div class="col-md-8 content" data="123">
+        </div>
+    </div>
+    <div class="col-md-2 chat">
+
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Signup</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="signupInputUsername">Username</label>
+                    <input type="email" class="form-control" id="signupInputUsername" placeholder="Enter Username">
+                </div>
+                <div class="form-group">
+                    <label for="signupInputEmail">Email address</label>
+                    <input type="email" class="form-control" id="signupInputEmail" placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                    <label for="signupInputPassword">Password</label>
+                    <input type="password" class="form-control" id="signupInputPassword" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <label for="signupInputPasswordRepeat">Repeat password</label>
+                    <input type="password" class="form-control" id="signupInputPasswordRepeat" placeholder="Password">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="signupSubmit">Ok</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,33 +1,61 @@
 package lan.home.forlife.controllers;
 
+import lan.home.forlife.domain.Article;
+import lan.home.forlife.domain.Subject;
 import lan.home.forlife.domain.User;
 import lan.home.forlife.dto.ArticleDTO;
+import lan.home.forlife.repositories.ArticleRepository;
 import lan.home.forlife.services.ArticleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("/article")
+@RestController
+@RequestMapping("/api/articles")
 public class ArticleController {
 
     protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    ArticleService articleService;
+//    @Autowired
+//    ArticleService articleService;
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public @ResponseBody boolean addArticle(@RequestBody ArticleDTO articleDTO, @AuthenticationPrincipal User user){
-        if(articleDTO!=null&&user!=null){
-            articleService.addArticle(articleDTO, user);
-            return true;
+    @Autowired
+    ArticleRepository articleRepository;
+
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public ResponseEntity<?> getAll(){
+        return new ResponseEntity<Iterable<Article>>(articleRepository.findAll(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getById(@PathVariable Long id){
+        Article article = articleRepository.findOne(id);
+        if(article!=null){
+            return new ResponseEntity<Article>(article, HttpStatus.OK);
         }
-        return false;
+        return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public ResponseEntity<?> addSubject(@RequestBody Article article){
+        Article saveArticle = articleRepository.save(article);
+        if(saveArticle!=null){
+            return new ResponseEntity<Object>(HttpStatus.OK);
+        }
+        return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+    }
+
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> delete(@PathVariable Long id){
+        if(id!=null) {
+            articleRepository.delete(id);
+            return new ResponseEntity<Object>(HttpStatus.OK);
+        }
+        return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
     }
 }

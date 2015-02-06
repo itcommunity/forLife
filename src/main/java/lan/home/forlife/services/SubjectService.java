@@ -31,11 +31,11 @@ public class SubjectService {
         return subjectRepository.findAll();
     }
 
-    public List<Element> getElements(Long subjectId){
-        if(subjectId!=null){
-            Subject subject = subjectRepository.findOne(subjectId);
-            return subject.getElements();
-        }
-        return null;
-    }
+//    public List<Element> getElements(Long subjectId){
+//        if(subjectId!=null){
+//            Subject subject = subjectRepository.findOne(subjectId);
+//            return subject.getElements();
+//        }
+//        return null;
+//    }
 }

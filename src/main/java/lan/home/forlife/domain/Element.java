@@ -19,7 +19,7 @@ public abstract class Element {
     @GeneratedValue
     private Long id;
 
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToOne
     private Type type;
 

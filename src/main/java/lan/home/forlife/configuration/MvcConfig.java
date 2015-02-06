@@ -21,7 +21,6 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private Environment env;
 
-
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         log.info("Load View Resolver");
@@ -43,7 +42,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         registration.setCachePeriod(0);
     }
 
-//    @Override
+    //    @Override
 //    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
 //        super.configureContentNegotiation(configurer);
 //        configurer.defaultContentType(MediaType.APPLICATION_JSON);

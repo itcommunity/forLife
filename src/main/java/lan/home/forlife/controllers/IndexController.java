@@ -26,6 +26,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by yar on 20.01.15.
@@ -70,7 +71,7 @@ public class IndexController {
 
     @RequestMapping(value = "/elements/{subjectId}", method = RequestMethod.GET)
     public @ResponseBody
-    List<Element> getElements(@PathVariable("subjectId")Long subjectId){
+    Set<Element> getElements(@PathVariable("subjectId") Long subjectId){
         Subject subject = subjectRepository.findOne(subjectId);
         if(subject!=null){
             return subject.getElements();

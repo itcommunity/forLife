@@ -1,10 +1,13 @@
 package lan.home.forlife.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.internal.NotNull;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by yar on 27.01.15.
@@ -14,11 +17,12 @@ public class Subject {
     @Id
     @GeneratedValue
     private Long id;
+
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "subject", fetch = FetchType.EAGER)
-    List<Element> elements = new ArrayList<>();
+    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
+    Set<Element> elements = new HashSet<>();
 
     public Subject() {
     }
@@ -39,11 +43,11 @@ public class Subject {
         this.name = name;
     }
 
-    public List<Element> getElements() {
+    public Set<Element> getElements() {
         return elements;
     }
 
-    public void setElements(List<Element> elements) {
+    public void setElements(Set<Element> elements) {
         this.elements = elements;
     }
 }

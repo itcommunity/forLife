@@ -1,6 +1,7 @@
 package lan.home.forlife.configuration;
 
 
+import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class MyWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {

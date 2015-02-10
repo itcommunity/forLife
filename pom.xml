@@ -4,10 +4,30 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>lan.home</groupId>
+    <groupId>lan.home.forlife</groupId>
     <artifactId>ForLife</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.4.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+            </plugin>
+        </plugins>
+    </build>
+    <modules>
+        <module>forlife-init</module>
+        <module>forlife-model</module>
+        <module>forlife-auth</module>
+        <module>forlife-api</module>
+    </modules>
+    <packaging>pom</packaging>
 
     <properties>
         <springVersion>4.1.4.RELEASE</springVersion>
@@ -107,6 +127,20 @@
             <artifactId>jackson-core</artifactId>
             <version>${jacksonVersion}</version>
         </dependency>
+
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.hateoas</groupId>-->
+        <!--<artifactId>spring-hateoas</artifactId>-->
+        <!--<version>0.16.0.RELEASE</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.data</groupId>-->
+        <!--<artifactId>spring-data-rest-webmvc</artifactId>-->
+        <!--<version>2.2.2.RELEASE</version>-->
+        <!--</dependency>-->
+
     </dependencies>
-    
+
+
 </project>

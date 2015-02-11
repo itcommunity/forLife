@@ -26,6 +26,7 @@
         <module>forlife-model</module>
         <module>forlife-auth</module>
         <module>forlife-api</module>
+        <module>forlife-rest-api</module>
     </modules>
     <packaging>pom</packaging>
 

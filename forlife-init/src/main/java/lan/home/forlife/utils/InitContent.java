@@ -28,7 +28,7 @@ public class InitContent {
     ArticleRepository articleRepository;
 
     @Autowired
-    TypeRepository typeRepository;
+    ElementTypeRepository typeRepository;
 
     @Autowired
     SubjectRepository subjectRepository;
@@ -46,11 +46,11 @@ public class InitContent {
         userRepository.save(yar);
 
 
-        Type articleType = new Type();
+        ElementType articleType = new ElementType();
         articleType.setName("article");
-        Type blogType = new Type();
+        ElementType blogType = new ElementType();
         blogType.setName("blog");
-        typeRepository.save(Arrays.asList(new Type[]{articleType, blogType}));
+        typeRepository.save(Arrays.asList(new ElementType[]{articleType, blogType}));
 
         Subject test1 = new Subject();
         test1.setName("testSubject1");

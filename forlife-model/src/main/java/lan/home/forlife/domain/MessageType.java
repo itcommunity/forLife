@@ -2,28 +2,28 @@ package lan.home.forlife.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by yar on 26.01.15.
+ * Created by yar on 17.02.15.
  */
 @Entity
-public class Type {
-
+public class MessageType {
     @Id
     @GeneratedValue
     private Long id;
-
     private String name;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "type")
-//    @JoinColumn(name = "element_id")
-    private List<Element> elements =new ArrayList<>();
+    @OneToMany(mappedBy = "type")
+    private List<Message> messages = new ArrayList<>();
 
-    public Type() {
+    public MessageType() {
     }
 
     public Long getId() {
@@ -42,11 +42,11 @@ public class Type {
         this.name = name;
     }
 
-    public List<Element> getElements() {
-        return elements;
+    public List<Message> getMessages() {
+        return messages;
     }
 
-    public void setElements(List<Element> elements) {
-        this.elements = elements;
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
     }
 }

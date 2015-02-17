@@ -14,6 +14,7 @@ import java.util.*;
 @Table(name = "users")
 public class User implements UserDetails{
     @Id
+
     @GeneratedValue
     private Long id;
 
@@ -53,6 +54,21 @@ public class User implements UserDetails{
     @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Element> elements = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "sender")
+    private List<Message> sentMessages = new ArrayList<>();
+
+    @JsonIgnore
+
+    @ManyToMany(
+//            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            mappedBy = "recipients",
+            targetEntity = Message.class
+    )
+    private List<Message> receivedMessages = new ArrayList<>();
+
+
 
     public User() {
     }
@@ -147,6 +163,22 @@ public class User implements UserDetails{
 
     public void setElements(List<Element> elements) {
         this.elements = elements;
+    }
+
+    public List<Message> getSentMessages() {
+        return sentMessages;
+    }
+
+    public void setSentMessages(List<Message> sentMessages) {
+        this.sentMessages = sentMessages;
+    }
+
+    public List<Message> getReceivedMessages() {
+        return receivedMessages;
+    }
+
+    public void setReceivedMessages(List<Message> receivedMessages) {
+        this.receivedMessages = receivedMessages;
     }
 
     @Override

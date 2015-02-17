@@ -3,9 +3,7 @@ package lan.home.forlife.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by yar on 26.01.15.
@@ -21,7 +19,7 @@ public abstract class Element {
 
 //    @JsonIgnore
     @ManyToOne
-    private Type type;
+    private ElementType type;
 
     @JsonIgnore
     @ManyToOne
@@ -43,11 +41,11 @@ public abstract class Element {
         this.id = id;
     }
 
-    public Type getType() {
+    public ElementType getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(ElementType type) {
         this.type = type;
     }
 

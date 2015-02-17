@@ -29,7 +29,7 @@ public class ArticleController extends ElementController{
         if(saveArticle!=null){
             return new ResponseEntity<Object>(HttpStatus.OK);
         }
-        return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -38,6 +38,6 @@ public class ArticleController extends ElementController{
             articleRepository.delete(id);
             return new ResponseEntity<Object>(HttpStatus.OK);
         }
-        return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
     }
 }

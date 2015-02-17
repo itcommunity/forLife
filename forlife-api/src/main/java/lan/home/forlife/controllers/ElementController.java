@@ -36,7 +36,7 @@ public class ElementController {
         if(element!=null){
             return new ResponseEntity<Element>(element, HttpStatus.OK);
         }
-        return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(value = "/{id}/subject", method = RequestMethod.GET)
@@ -45,6 +45,6 @@ public class ElementController {
         if(element!=null){
             return new ResponseEntity<Subject>(element.getSubject(), HttpStatus.OK);
         }
-        return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
     }
 }

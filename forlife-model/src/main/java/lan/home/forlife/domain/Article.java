@@ -1,6 +1,7 @@
 package lan.home.forlife.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lan.home.forlife.domain.Element;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -10,21 +11,12 @@ import javax.persistence.Entity;
  */
 @Entity
 @DiscriminatorValue("article")
-public class Article extends Element{
-    private String name;
+public class Article extends Element {
     private String title;
     @JsonIgnore
     private String content;
 
     public Article() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getContent() {
@@ -46,7 +38,6 @@ public class Article extends Element{
     @Override
     public String toString() {
         return "Article{" +
-                "name='" + name + '\'' +
                 ", content='" + content + '\'' +
                 '}';
     }

@@ -70,6 +70,7 @@ public class ModelConfiguration {
 
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+        properties.setProperty("auto-import", "false");
 //        properties.setProperty("hibernate.hbm2ddl.auto", "update");
 
 

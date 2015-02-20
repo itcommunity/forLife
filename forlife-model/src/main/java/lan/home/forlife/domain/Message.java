@@ -3,9 +3,7 @@ package lan.home.forlife.domain;
 import com.sun.istack.internal.NotNull;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by yar on 17.02.15.
@@ -19,24 +17,13 @@ public abstract class Message {
     private Long id;
 
     @NotNull
-    @ManyToOne
+    @Enumerated(EnumType.STRING)
     private MessageType type;
 
     private Date created=new Date();
 
     @ManyToOne
     private User sender;
-
-    @ManyToMany(
-            targetEntity=User.class
-//            cascade={CascadeType.PERSIST, CascadeType.MERGE}
-    )
-    @JoinTable(
-            name="MESSAGE_RECIPIENTS",
-            joinColumns=@JoinColumn(name="MESSAGE_ID"),
-            inverseJoinColumns=@JoinColumn(name="USER_ID")
-    )
-    private List<User> recipients = new ArrayList<>();
 
     public Message() {
     }
@@ -71,13 +58,5 @@ public abstract class Message {
 
     public void setSender(User sender) {
         this.sender = sender;
-    }
-
-    public List<User> getRecipients() {
-        return recipients;
-    }
-
-    public void setRecipients(List<User> recipients) {
-        this.recipients = recipients;
     }
 }

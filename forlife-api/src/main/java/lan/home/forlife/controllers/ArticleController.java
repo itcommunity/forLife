@@ -1,6 +1,5 @@
 package lan.home.forlife.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lan.home.forlife.domain.Article;
 import lan.home.forlife.domain.User;
 import lan.home.forlife.repositories.ArticleRepository;
@@ -23,8 +22,8 @@ public class ArticleController extends ElementController{
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     public ResponseEntity<?> addSubject(@RequestBody Article article, @AuthenticationPrincipal User user){
-        article.setUser(user);
-        log.info("Articles subj: "+article.getSubject());
+        article.setOwner(user);
+        log.info("Articles subj: " + article.getSubject());
         Article saveArticle = articleRepository.save(article);
         if(saveArticle!=null){
             return new ResponseEntity<Object>(HttpStatus.OK);

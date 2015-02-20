@@ -3,12 +3,12 @@ package lan.home.forlife.repositories;
 import lan.home.forlife.domain.User;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
  * Created by yar on 20.01.15.
  */
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
     @Override
     @CacheEvict("default")

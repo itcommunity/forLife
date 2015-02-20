@@ -1,23 +1,19 @@
 package lan.home.forlife.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lan.home.forlife.domain.Article;
 import lan.home.forlife.domain.Element;
 import lan.home.forlife.domain.Subject;
+import lan.home.forlife.domain.User;
 import lan.home.forlife.repositories.ElementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by yar on 27.01.15.
  */
-@Controller
+@RestController
 @RequestMapping("/api/elements")
 public class ElementController {
 
@@ -44,6 +40,15 @@ public class ElementController {
         Element element = elementRepository.findOne(id);
         if(element!=null){
             return new ResponseEntity<Subject>(element.getSubject(), HttpStatus.OK);
+        }
+        return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
+    }
+
+    @RequestMapping(value = "/{id}/owner", method = RequestMethod.GET)
+    public @ResponseBody ResponseEntity<?> getOwner(@PathVariable Long id){
+        Element element = elementRepository.findOne(id);
+        if(element!=null){
+            return new ResponseEntity<User>(element.getOwner(), HttpStatus.OK);
         }
         return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
     }

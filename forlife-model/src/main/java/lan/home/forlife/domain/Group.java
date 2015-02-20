@@ -1,7 +1,6 @@
 package lan.home.forlife.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -21,11 +20,15 @@ public class Group {
     @JsonIgnore
     @ManyToMany(
 //            cascade = CascadeType.PERSIST,
-            fetch = FetchType.EAGER,
+//            fetch = FetchType.EAGER,
             mappedBy = "groups",
             targetEntity = User.class
     )
     private List<User> users = new ArrayList<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private List<Role> roles = new ArrayList<>();
 
     public Group() {
     }
@@ -56,6 +59,14 @@ public class Group {
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     @Override

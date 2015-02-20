@@ -41,32 +41,31 @@ public class User implements UserDetails{
             fetch = FetchType.EAGER
     )
     @JoinTable(
-            name="USERS_GROUPS",
+            name="USER_GROUP",
             joinColumns=@JoinColumn(name="USER_ID"),
             inverseJoinColumns=@JoinColumn(name="GROUP_ID")
     )
     private List<Group> groups = new ArrayList<>();
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
-    private List<Role> roles = new ArrayList<>();
+//    @ElementCollection(fetch = FetchType.EAGER)
+//    @Enumerated(EnumType.STRING)
+//    private List<Role> roles = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<Element> elements = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "sender")
-    private List<Message> sentMessages = new ArrayList<>();
+    private List<Message> outgoingMessages = new ArrayList<>();
 
     @JsonIgnore
-
     @ManyToMany(
 //            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-            mappedBy = "recipients",
-            targetEntity = Message.class
+//            mappedBy = "recipients",
+//            targetEntity = Message.class
     )
-    private List<Message> receivedMessages = new ArrayList<>();
+    private List<Message> incomingMessages = new ArrayList<>();
 
 
 
@@ -149,13 +148,13 @@ public class User implements UserDetails{
         this.groups = groups;
     }
 
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
+//    public List<Role> getRoles() {
+//        return roles;
+//    }
+//
+//    public void setRoles(List<Role> roles) {
+//        this.roles = roles;
+//    }
 
     public List<Element> getElements() {
         return elements;
@@ -165,24 +164,13 @@ public class User implements UserDetails{
         this.elements = elements;
     }
 
-    public List<Message> getSentMessages() {
-        return sentMessages;
-    }
-
-    public void setSentMessages(List<Message> sentMessages) {
-        this.sentMessages = sentMessages;
-    }
-
-    public List<Message> getReceivedMessages() {
-        return receivedMessages;
-    }
-
-    public void setReceivedMessages(List<Message> receivedMessages) {
-        this.receivedMessages = receivedMessages;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<Role> roles = new HashSet<>();
+        for (Group group: groups){
+            roles.addAll(group.getRoles());
+        }
         return roles;
     }
 

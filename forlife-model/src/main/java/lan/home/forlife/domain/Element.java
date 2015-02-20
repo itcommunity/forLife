@@ -1,6 +1,7 @@
 package lan.home.forlife.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.internal.NotNull;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -9,16 +10,18 @@ import java.util.Date;
  * Created by yar on 26.01.15.
  */
 @Entity
-@Inheritance(strategy= InheritanceType.JOINED)
-@DiscriminatorColumn(name = "element", discriminatorType = DiscriminatorType.STRING)
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "elements", discriminatorType = DiscriminatorType.STRING)
 public abstract class Element {
 
     @Id
     @GeneratedValue
     private Long id;
 
-//    @JsonIgnore
-    @ManyToOne
+    private String name;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
     private ElementType type;
 
     @JsonIgnore
@@ -26,9 +29,9 @@ public abstract class Element {
     private Subject subject;
 
     @ManyToOne
-    private User user;
+    private User owner;
 
-    private Date added=new Date();
+    private Date created = new Date();
 
     public Element() {
     }
@@ -49,14 +52,6 @@ public abstract class Element {
         this.type = type;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public Subject getSubject() {
         return subject;
     }
@@ -65,12 +60,28 @@ public abstract class Element {
         this.subject = subject;
     }
 
-    public Date getAdded() {
-        return added;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setAdded(Date added) {
-        this.added = added;
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -78,6 +89,9 @@ public abstract class Element {
         return "Element{" +
                 "id=" + id +
                 ", type=" + type +
+                ", subject=" + subject +
+                ", owner=" + owner +
+                ", created=" + created +
                 '}';
     }
 }

@@ -6,6 +6,7 @@ import lan.home.forlife.dto.LoginRequest;
 import lan.home.forlife.dto.LoginResponse;
 import lan.home.forlife.dto.SignupRequest;
 import lan.home.forlife.dto.UserInfo;
+import lan.home.forlife.repositories.GroupRepository;
 import lan.home.forlife.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,9 @@ public class LoginController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private GroupRepository groupRepository;
+
     @RequestMapping(value = "/signup.json", method = RequestMethod.POST)
     public @ResponseBody boolean signup(@RequestBody SignupRequest signupRequest){
         User user = new User();
@@ -52,7 +56,7 @@ public class LoginController {
             user.setUsername(signupRequest.getUsername());
             user.setEmail(signupRequest.getEmail());
             user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
-            user.setRoles(Arrays.asList(new Role[]{Role.USER}));
+            user.getGroups().add(groupRepository.findByGroupname("user"));
             userRepository.save(user);
             return true;
         }

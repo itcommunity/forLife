@@ -54,7 +54,7 @@ public class ModelConfiguration {
         source.setServerName("10.0.1.5");
         source.setDatabaseName("forlife");
         source.setUser("yar");
-        source.setPassword("alkogol");
+        source.setPassword("123456");
         source.setMaxConnections(5);
         return source;
     }

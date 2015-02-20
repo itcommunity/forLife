@@ -39,7 +39,7 @@ public class InitContent {
         groupRepository.save(admin);
         User yar = new User();
         yar.setUsername("yar");
-        yar.setPassword(passwordEncoder.encode("alkogol"));
+        yar.setPassword(passwordEncoder.encode("123456"));
         yar.getGroups().add(admin);
         yar.getRoles().add(Role.ADMIN);
         yar.getRoles().add(Role.USER);

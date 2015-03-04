@@ -10,7 +10,7 @@ import javax.persistence.Entity;
  * Created by yar on 26.01.15.
  */
 @Entity
-@DiscriminatorValue("article")
+@DiscriminatorValue("ARTICLE")
 public class Article extends Element {
     private String title;
 //    @JsonIgnore

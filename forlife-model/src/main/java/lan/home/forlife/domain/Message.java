@@ -1,8 +1,7 @@
 package lan.home.forlife.domain;
 
-import com.sun.istack.internal.NotNull;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**

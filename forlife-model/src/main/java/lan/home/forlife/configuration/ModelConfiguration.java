@@ -1,8 +1,10 @@
 package lan.home.forlife.configuration;
 
+import lan.home.forlife.utils.DataSourceBuilder;
 import org.postgresql.ds.PGPoolingDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
@@ -10,7 +12,11 @@ import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
@@ -27,50 +33,40 @@ import java.util.Properties;
 @ComponentScan("lan.home.forlife")
 @EnableJpaRepositories("lan.home.forlife.repositories")
 @EnableTransactionManagement
+@PropertySource("classpath:/db.properties")
 //@PropertySource("/WEB-INF/general.properties")
 @EnableCaching
 public class ModelConfiguration {
     protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
-//    @Bean
-//    public MultipartResolver multipartResolver(){
-//        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-//        multipartResolver.setMaxUploadSize(10000000);
-//        return multipartResolver;
-//    }
+    @Autowired
+    private Environment environment;
 
-//    @Bean
-//    public DataSource dataSource() {
-//        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-//        return builder.setType(EmbeddedDatabaseType.H2).build();
-//    }
 
     @Bean
     public DataSource dataSource() {
-//        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-//        return builder.setType(EmbeddedDatabaseType.H2).build();
-        PGPoolingDataSource source = new PGPoolingDataSource();
-        source.setDataSourceName("A Data Source");
-        source.setServerName("10.0.1.5");
-        source.setDatabaseName("forlife");
-        source.setUser("yar");
-        source.setPassword("123456");
-        source.setMaxConnections(5);
-        return source;
+        DataSourceBuilder dataSourceBuilder = new DataSourceBuilder(environment);
+        return dataSourceBuilder.getDataSource();
     }
 
     @Bean
     public EntityManagerFactory entityManagerFactory() {
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-//        vendorAdapter.setDatabase(Database.H2);
-        vendorAdapter.setDatabase(Database.POSTGRESQL);
+        String dbEngine=environment.getProperty("db.engine").replace("\"", "");
+        if(dbEngine.equals("H2")){
+            vendorAdapter.setDatabase(Database.H2);
+        } else if (dbEngine.equals("POSTGRESQL")){
+            vendorAdapter.setDatabase(Database.POSTGRESQL);
+        } else {
+            vendorAdapter.setDatabase(Database.H2);
+        }
         vendorAdapter.setGenerateDdl(true);
         vendorAdapter.setShowSql(true);
 
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
-        properties.setProperty("auto-import", "false");
+//        properties.setProperty("auto-import", "false");
 //        properties.setProperty("hibernate.hbm2ddl.auto", "update");
 
 
@@ -97,6 +93,4 @@ public class ModelConfiguration {
         cacheManager.setCaches(Arrays.asList(new ConcurrentMapCache("default")));
         return cacheManager;
     }
-
-
 }

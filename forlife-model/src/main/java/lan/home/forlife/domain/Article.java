@@ -13,7 +13,7 @@ import javax.persistence.Entity;
 @DiscriminatorValue("article")
 public class Article extends Element {
     private String title;
-    @JsonIgnore
+//    @JsonIgnore
     private String content;
 
     public Article() {

@@ -20,7 +20,7 @@ public abstract class Element {
 
     private String name;
 
-    @NotNull
+//    @NotNull
     @Enumerated(EnumType.STRING)
     private ElementType type;
 

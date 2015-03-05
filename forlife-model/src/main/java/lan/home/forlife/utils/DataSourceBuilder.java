@@ -26,9 +26,6 @@ public class DataSourceBuilder {
         log.info("Data Source property: " + dbEngine);
         DataSource dataSource;
         switch (dbEngine){
-            case "H2":
-                dataSource = getH2DataSource();
-                break;
             case "HSQL":
                 dataSource = getHSQLDataSource();
                 break;
@@ -53,12 +50,6 @@ public class DataSourceBuilder {
         source.setPassword(getClearProperty("db.password"));
         source.setMaxConnections(Integer.parseInt(getClearProperty("db.postgresql.max.connections")));
         return source;
-    }
-
-    private DataSource getH2DataSource() {
-        log.info("Loading H2 Data Source");
-        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-        return builder.setType(EmbeddedDatabaseType.H2).build();
     }
 
     private DataSource getHSQLDataSource(){

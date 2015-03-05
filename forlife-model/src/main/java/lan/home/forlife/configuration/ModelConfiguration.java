@@ -54,9 +54,6 @@ public class ModelConfiguration {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         String dbEngine=environment.getProperty("db.engine").replace("\"", "");
         switch (dbEngine){
-            case "H2":
-                vendorAdapter.setDatabase(Database.H2);
-                break;
             case "HSQL":
                 vendorAdapter.setDatabase(Database.HSQL);
                 break;

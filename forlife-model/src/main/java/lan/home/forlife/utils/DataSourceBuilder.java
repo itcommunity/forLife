@@ -22,16 +22,22 @@ public class DataSourceBuilder {
     }
 
     public DataSource getDataSource() {
-        String dbEngine = environment.getProperty("db.engine").replace("\"", "");
+        String dbEngine = getClearProperty("db.engine");
         log.info("Data Source property: " + dbEngine);
         DataSource dataSource;
-        if (dbEngine.equals("H2")) {
-            dataSource = getH2DataSource();
-        } else if (dbEngine.equals("POSTGRESQL")) {
-
-            dataSource = getPostgresqlDataSource();
-        } else {
-            dataSource = getH2DataSource();
+        switch (dbEngine){
+            case "H2":
+                dataSource = getH2DataSource();
+                break;
+            case "HSQL":
+                dataSource = getHSQLDataSource();
+                break;
+            case "POSTGRESQL":
+                dataSource = getPostgresqlDataSource();
+                break;
+            default:
+                dataSource=getHSQLDataSource();
+                break;
         }
         return dataSource;
     }
@@ -40,12 +46,12 @@ public class DataSourceBuilder {
         log.info("Loading Postgresql Data Source");
         PGPoolingDataSource source = new PGPoolingDataSource();
         source.setDataSourceName("Postgresql Data Source");
-        source.setServerName(environment.getProperty("db.postgresql.host").replace("\"", ""));
-        source.setPortNumber(Integer.parseInt(environment.getProperty("db.postgresql.port").replace("\"", "")));
-        source.setDatabaseName(environment.getProperty("db.name").replace("\"", ""));
-        source.setUser(environment.getProperty("db.user").replace("\"", ""));
-        source.setPassword(environment.getProperty("db.password").replace("\"", ""));
-        source.setMaxConnections(Integer.parseInt(environment.getProperty("db.postgresql.max.connections").replace("\"", "")));
+        source.setServerName(getClearProperty("db.postgresql.host"));
+        source.setPortNumber(Integer.parseInt(getClearProperty("db.postgresql.port")));
+        source.setDatabaseName(getClearProperty("db.name"));
+        source.setUser(getClearProperty("db.user"));
+        source.setPassword(getClearProperty("db.password"));
+        source.setMaxConnections(Integer.parseInt(getClearProperty("db.postgresql.max.connections")));
         return source;
     }
 
@@ -53,5 +59,15 @@ public class DataSourceBuilder {
         log.info("Loading H2 Data Source");
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
         return builder.setType(EmbeddedDatabaseType.H2).build();
+    }
+
+    private DataSource getHSQLDataSource(){
+        log.info("Loading HSQL Data Source");
+        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+        return builder.setType(EmbeddedDatabaseType.HSQL).build();
+    }
+
+    private String getClearProperty(String property){
+        return environment.getProperty(property).replace("\"", "");
     }
 }

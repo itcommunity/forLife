@@ -8,8 +8,8 @@ import java.util.Date;
  * Created by yar on 17.02.15.
  */
 @Entity
-@Inheritance(strategy= InheritanceType.JOINED)
-@DiscriminatorColumn(name = "message", discriminatorType = DiscriminatorType.STRING)
+//@Inheritance(strategy= InheritanceType.JOINED)
+//@DiscriminatorColumn(name = "message", discriminatorType = DiscriminatorType.STRING)
 public abstract class Message {
     @Id
     @GeneratedValue

@@ -14,7 +14,7 @@ import java.util.Set;
  * Created by yar on 20.02.15.
  */
 @Entity
-@DiscriminatorValue("TEXT_MESSAGE")
+//@DiscriminatorValue("TEXT_MESSAGE")
 public class TextMessage extends Message{
     private String text;
 

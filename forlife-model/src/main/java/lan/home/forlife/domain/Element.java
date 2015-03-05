@@ -10,8 +10,8 @@ import java.util.Date;
  * Created by yar on 26.01.15.
  */
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "elements", discriminatorType = DiscriminatorType.STRING)
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+//@DiscriminatorColumn(name = "elements", discriminatorType = DiscriminatorType.INTEGER)
 public abstract class Element {
 
     @Id
@@ -31,7 +31,7 @@ public abstract class Element {
     @ManyToOne
     private User owner;
 
-    private Date created = new Date();
+//    private Date created = new Date();
 
     public Element() {
     }
@@ -68,13 +68,13 @@ public abstract class Element {
         this.owner = owner;
     }
 
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
+//    public Date getCreated() {
+//        return created;
+//    }
+//
+//    public void setCreated(Date created) {
+//        this.created = created;
+//    }
 
     public String getName() {
         return name;
@@ -91,7 +91,7 @@ public abstract class Element {
                 ", type=" + type +
                 ", subject=" + subject +
                 ", owner=" + owner +
-                ", created=" + created +
+//                ", created=" + created +
                 '}';
     }
 }

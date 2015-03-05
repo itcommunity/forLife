@@ -51,15 +51,21 @@ public class ModelConfiguration {
 
     @Bean
     public EntityManagerFactory entityManagerFactory() {
-
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         String dbEngine=environment.getProperty("db.engine").replace("\"", "");
-        if(dbEngine.equals("H2")){
-            vendorAdapter.setDatabase(Database.H2);
-        } else if (dbEngine.equals("POSTGRESQL")){
-            vendorAdapter.setDatabase(Database.POSTGRESQL);
-        } else {
-            vendorAdapter.setDatabase(Database.H2);
+        switch (dbEngine){
+            case "H2":
+                vendorAdapter.setDatabase(Database.H2);
+                break;
+            case "HSQL":
+                vendorAdapter.setDatabase(Database.HSQL);
+                break;
+            case "POSTGRESQL":
+                vendorAdapter.setDatabase(Database.POSTGRESQL);
+                break;
+            default:
+                vendorAdapter.setDatabase(Database.HSQL);
+                break;
         }
         vendorAdapter.setGenerateDdl(true);
         vendorAdapter.setShowSql(true);

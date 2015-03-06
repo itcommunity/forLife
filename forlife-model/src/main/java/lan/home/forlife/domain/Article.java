@@ -18,6 +18,7 @@ public class Article extends Element {
     private String content;
 
     public Article() {
+        setType(ElementType.ARTICLE);
     }
 
     public String getContent() {

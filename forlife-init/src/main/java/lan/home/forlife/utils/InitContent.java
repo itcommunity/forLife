@@ -70,6 +70,12 @@ public class InitContent {
         article1.setType(ElementType.ARTICLE);
         article1.setName("testBBB");
         article1.setContent("<h2>Content 2</h2>");
-        articleRepository.save(Arrays.asList(new Article[]{article, article1}));
+        article1.setSubject(test2);
+        Article article2 = new Article();
+        article2.setName("New Test Article");
+        article2.setSubject(test1);
+        article2.setTitle("Hello Article");
+        article2.setContent("<h3>Hello Article</h3>");
+        articleRepository.save(Arrays.asList(new Article[]{article, article1, article2}));
     }
 }

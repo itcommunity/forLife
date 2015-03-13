@@ -12,7 +12,7 @@ import java.util.*;
  */
 @Entity
 @Table(name = "users")
-public class User implements UserDetails{
+public class User implements UserDetails {
     @Id
 
     @GeneratedValue
@@ -24,26 +24,27 @@ public class User implements UserDetails{
     @JsonIgnore
     private String password;
     private String email;
-    private boolean enabled=true;
-    private boolean locked=false;
+    private boolean enabled = true;
+    private boolean locked = false;
     private Date registrationDate;
     private Date expirationDate;
+
     {
-        registrationDate=new Date();
+        registrationDate = new Date();
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MONTH, 1);
-        expirationDate=cal.getTime();
+        expirationDate = cal.getTime();
     }
 
     @ManyToMany(
-            targetEntity=Group.class,
+            targetEntity = Group.class,
 //            cascade={CascadeType.PERSIST},
             fetch = FetchType.EAGER
     )
     @JoinTable(
-            name="USER_GROUP",
-            joinColumns=@JoinColumn(name="USER_ID"),
-            inverseJoinColumns=@JoinColumn(name="GROUP_ID")
+            name = "USER_GROUP",
+            joinColumns = @JoinColumn(name = "USER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "GROUP_ID")
     )
     private List<Group> groups = new ArrayList<>();
 
@@ -53,7 +54,7 @@ public class User implements UserDetails{
 
     @JsonIgnore
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
-    private List<Element> elements = new ArrayList<>();
+    private List<Page> pages = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "sender")
@@ -66,7 +67,6 @@ public class User implements UserDetails{
 //            targetEntity = Message.class
     )
     private List<Message> incomingMessages = new ArrayList<>();
-
 
 
     public User() {
@@ -148,7 +148,31 @@ public class User implements UserDetails{
         this.groups = groups;
     }
 
-//    public List<Role> getRoles() {
+    public List<Page> getPages() {
+        return pages;
+    }
+
+    public void setPages(List<Page> pages) {
+        this.pages = pages;
+    }
+
+    public List<Message> getOutgoingMessages() {
+        return outgoingMessages;
+    }
+
+    public void setOutgoingMessages(List<Message> outgoingMessages) {
+        this.outgoingMessages = outgoingMessages;
+    }
+
+    public List<Message> getIncomingMessages() {
+        return incomingMessages;
+    }
+
+    public void setIncomingMessages(List<Message> incomingMessages) {
+        this.incomingMessages = incomingMessages;
+    }
+
+    //    public List<Role> getRoles() {
 //        return roles;
 //    }
 //
@@ -156,19 +180,11 @@ public class User implements UserDetails{
 //        this.roles = roles;
 //    }
 
-    public List<Element> getElements() {
-        return elements;
-    }
-
-    public void setElements(List<Element> elements) {
-        this.elements = elements;
-    }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<Role> roles = new HashSet<>();
-        for (Group group: groups){
+        for (Group group : groups) {
             roles.addAll(group.getRoles());
         }
         return roles;
@@ -203,22 +219,5 @@ public class User implements UserDetails{
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "groups=" + groups +
-                ", expirationDate=" + expirationDate +
-                ", registrationDate=" + registrationDate +
-                ", locked=" + locked +
-                ", enabled=" + enabled +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", firstname='" + firstname + '\'' +
-                ", username='" + username + '\'' +
-                ", id=" + id +
-                '}';
     }
 }

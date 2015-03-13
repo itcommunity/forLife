@@ -17,9 +17,11 @@ public class Subject {
 
     private String name;
 
+    private String description;
+
     @JsonIgnore
     @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
-    Set<Element> elements = new HashSet<>();
+    Set<Page> pages = new HashSet<>();
 
     public Subject() {
     }
@@ -40,11 +42,19 @@ public class Subject {
         this.name = name;
     }
 
-    public Set<Element> getElements() {
-        return elements;
+    public String getDescription() {
+        return description;
     }
 
-    public void setElements(Set<Element> elements) {
-        this.elements = elements;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<Page> getPages() {
+        return pages;
+    }
+
+    public void setPages(Set<Page> pages) {
+        this.pages = pages;
     }
 }

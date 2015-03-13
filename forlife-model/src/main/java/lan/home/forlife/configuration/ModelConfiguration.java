@@ -42,7 +42,6 @@ public class ModelConfiguration {
     @Autowired
     private Environment environment;
 
-
     @Bean
     public DataSource dataSource() {
         DataSourceBuilder dataSourceBuilder = new DataSourceBuilder(environment);

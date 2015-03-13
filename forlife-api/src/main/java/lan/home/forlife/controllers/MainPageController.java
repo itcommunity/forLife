@@ -1,8 +1,9 @@
 package lan.home.forlife.controllers;
 
-import lan.home.forlife.domain.Article;
+import lan.home.forlife.domain.MainPage;
+import lan.home.forlife.domain.Page;
 import lan.home.forlife.domain.User;
-import lan.home.forlife.repositories.ArticleRepository;
+import lan.home.forlife.repositories.MainPageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,29 +13,28 @@ import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/articles")
-public class ArticleController extends PageController {
+@RequestMapping("/api/mainpage")
+public class MainPageController extends PageController {
 
     protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    ArticleRepository articleRepository;
+    MainPageRepository mainPageRepository;
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public ResponseEntity<?> add(@RequestBody Article article, @AuthenticationPrincipal User user){
-        article.setOwner(user);
-        log.info("Articles subj: " + article.getSubject());
-        Article saveArticle = articleRepository.save(article);
-        if(saveArticle!=null){
+    public ResponseEntity<?> add(@RequestBody MainPage mainPage, @AuthenticationPrincipal User user) {
+        mainPage.setOwner(user);
+        Page savedPage = mainPageRepository.save(mainPage);
+        if (savedPage != null) {
             return new ResponseEntity<Object>(HttpStatus.OK);
         }
         return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> delete(@PathVariable Long id){
-        if(id!=null) {
-            articleRepository.delete(id);
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        if (id != null) {
+            mainPageRepository.delete(id);
             return new ResponseEntity<Object>(HttpStatus.OK);
         }
         return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);

@@ -1,18 +1,15 @@
 package lan.home.forlife.controllers;
 
-import lan.home.forlife.domain.Element;
+import lan.home.forlife.domain.Page;
 import lan.home.forlife.domain.Subject;
-import lan.home.forlife.repositories.ElementRepository;
+import lan.home.forlife.repositories.PageRepository;
 import lan.home.forlife.repositories.SubjectRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * Created by yar on 27.01.15.
@@ -28,7 +25,7 @@ public class SubjectController {
     private SubjectRepository subjectRepository;
 
     @Autowired
-    private ElementRepository elementRepository;
+    private PageRepository elementRepository;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<?> getAll(){
@@ -55,9 +52,9 @@ public class SubjectController {
 
     @RequestMapping(value = "{id}/elements", method = RequestMethod.GET)
     public ResponseEntity<?> getElements(@PathVariable Long id){
-        Subject subject = subjectRepository.findByIdAndFetchElementsEagerly(id);
+        Subject subject = subjectRepository.findByIdAndFetchPagesEagerly(id);
         if(subject!=null){
-            return new ResponseEntity<Object>(subject.getElements(), HttpStatus.OK);
+            return new ResponseEntity<Object>(subject.getPages(), HttpStatus.OK);
         }
         return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
     }
@@ -74,8 +71,8 @@ public class SubjectController {
     @RequestMapping(value = "{id}/elements/{elementId}", method = RequestMethod.PUT)
     public ResponseEntity<?> addElement(@PathVariable Long id, @PathVariable Long elementId){
         if(id!=null&&elementId!=null){
-            Subject subject = subjectRepository.findByIdAndFetchElementsEagerly(id);
-            Element element = elementRepository.findOne(elementId);
+            Subject subject = subjectRepository.findByIdAndFetchPagesEagerly(id);
+            Page element = elementRepository.findOne(elementId);
             if(subject!=null&&element!=null){
                 element.setSubject(subject);
 //                subject.getElements().add(element);

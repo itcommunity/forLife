@@ -11,6 +11,6 @@ import org.springframework.data.repository.query.Param;
  */
 public interface SubjectRepository extends PagingAndSortingRepository<Subject, Long> {
 
-    @Query("SELECT s FROM Subject s JOIN FETCH s.elements WHERE s.id = (:id)")
-    public Subject findByIdAndFetchElementsEagerly(@Param("id") Long id);
+    @Query("SELECT s FROM Subject s JOIN FETCH s.pages WHERE s.id = (:id)")
+    public Subject findByIdAndFetchPagesEagerly(@Param("id") Long id);
 }

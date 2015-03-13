@@ -19,7 +19,7 @@ public abstract class Message {
     @Enumerated(EnumType.STRING)
     private MessageType type;
 
-    private Date created=new Date();
+    private Date created = new Date();
 
     @ManyToOne
     private User sender;

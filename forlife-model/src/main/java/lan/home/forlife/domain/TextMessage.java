@@ -1,10 +1,5 @@
 package lan.home.forlife.domain;
 
-import lan.home.forlife.domain.Group;
-import lan.home.forlife.domain.Message;
-import lan.home.forlife.domain.User;
-
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import java.util.HashSet;
@@ -15,7 +10,7 @@ import java.util.Set;
  */
 @Entity
 //@DiscriminatorValue("TEXT_MESSAGE")
-public class TextMessage extends Message{
+public class TextMessage extends Message {
     private String text;
 
     @ManyToMany

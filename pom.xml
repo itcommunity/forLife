@@ -58,6 +58,7 @@
         <module>forlife-auth</module>
         <module>forlife-api</module>
         <module>forlife-rest-api</module>
+        <module>forlife-admin</module>
     </modules>
     <packaging>pom</packaging>
 

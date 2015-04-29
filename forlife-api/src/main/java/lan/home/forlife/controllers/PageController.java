@@ -5,16 +5,15 @@ import lan.home.forlife.domain.PageType;
 import lan.home.forlife.domain.Subject;
 import lan.home.forlife.domain.User;
 import lan.home.forlife.repositories.PageRepository;
+import lan.home.forlife.utils.ApiVersion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Created by yar on 27.01.15.
- */
 @RestController
-@RequestMapping("/api/pages")
+@RequestMapping("/pages")
+@ApiVersion
 public class PageController {
 
 

@@ -4,6 +4,7 @@ import lan.home.forlife.domain.MainPage;
 import lan.home.forlife.domain.Page;
 import lan.home.forlife.domain.User;
 import lan.home.forlife.repositories.MainPageRepository;
+import lan.home.forlife.utils.ApiVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,8 @@ import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/mainpage")
+@RequestMapping("/mainpages")
+@ApiVersion
 public class MainPageController extends PageController {
 
     protected final Logger log = LoggerFactory.getLogger(this.getClass());

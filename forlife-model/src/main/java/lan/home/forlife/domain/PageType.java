@@ -1,8 +1,21 @@
 package lan.home.forlife.domain;
 
-/**
- * Created by yar on 20.02.15.
- */
 public enum PageType {
-    ARTICLE, MAIN_PAGE
+    ARTICLE("/api/articles", "Article"),
+    MAIN_PAGE("/api/mainpages", "Main page");
+
+    private String baseUrl;
+    private String pageDescription;
+    PageType(String baseUrl, String pageDescription) {
+        this.baseUrl=baseUrl;
+        this.pageDescription=pageDescription;
+    }
+
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public String getPageDescription() {
+        return pageDescription;
+    }
 }

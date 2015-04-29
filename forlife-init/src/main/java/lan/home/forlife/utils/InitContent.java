@@ -55,7 +55,6 @@ public class InitContent {
 
         Article article = new Article();
         article.setName("testArticle");
-        article.setType(PageType.ARTICLE);
         article.setSubject(test1);
 //        article.setContent("<p style=\"text-align: center;\">Test content</p>\n" +
 //                "<ul>\n" +
@@ -66,7 +65,6 @@ public class InitContent {
 //                "</ul>");
         article.setContent("<h1>Content 1</h1>");
         Article article1 = new Article();
-        article1.setType(PageType.ARTICLE);
         article1.setName("testBBB");
         article1.setContent("<h2>Content 2</h2>");
         article1.setSubject(test2);

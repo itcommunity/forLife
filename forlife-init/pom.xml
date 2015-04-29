@@ -32,11 +32,11 @@
             <artifactId>forlife-auth</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>lan.home.forlife</groupId>
-            <artifactId>forlife-rest-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>lan.home.forlife</groupId>-->
+            <!--<artifactId>forlife-rest-api</artifactId>-->
+            <!--<version>1.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
     </dependencies>
 
 </project>

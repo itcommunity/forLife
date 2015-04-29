@@ -2,9 +2,6 @@ package lan.home.forlife.domain;
 
 import javax.persistence.Entity;
 
-/**
- * Created by yar on 26.01.15.
- */
 @Entity
 //@DiscriminatorValue("ARTICLE")
 //@DiscriminatorValue("")
